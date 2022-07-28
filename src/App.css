@@ -1,3 +1,14 @@
+.container-cards{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  justify-content: space-around;
+  
+  /*
+  */
+ }
+
 .App {
   text-align: center;
 }
