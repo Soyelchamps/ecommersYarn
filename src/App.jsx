@@ -1,47 +1,50 @@
 import React, {useEffect, useState } from 'react';
-import logo from './logo.svg';
+import logo from './Assets/logo.svg';
+import { ReactComponent as pacman } from './Assets/pacman.svg';
 import './App.css';
+import { productosApi } from './Api/productosApi';
+import { Card } from './Share/Card';
 
 function App() {
-  const [users, setUsers] = useState ([]) //argunto de useState es el valor inicial que queremos para
-    //nuestro estado
   
+  const [productos, setProductos] = useState ([]) //argunto de useState es el valor inicial que queremos para
+  const [loading, setLoading] = useState(false)
+
+  const getProductos = async() => {
+    setLoading(true)
+  const res= await productosApi.get('/item')
+    setProductos(res.data)
+    setLoading(false)
+    console.log(JSON.stringify(res.data))
+   }
+
+useEffect (() => {
+  console.log('hola me monte en la pantalla')
+  getProductos() }, [])
   
-    // https://ecomerce-master.herokuapp.com/api/v1/item
-    //todos los productos
-    //https://ecomerce-master.herokuapp.com/api/v1/item/5fbc19a65a3f794d72471163
-    //me da 1 solo producto 
-    //MOC 
-    //Nombre
-    //descripcion 
-    //precio
-    //categoria
-    //Imagen 
-    //Ultima actuliacion 
-
-
   return (
     <>
-       <nav class="navbar navbar-light bg-light">
-        <form class="form-inline">
-          <input class="form-control mr-sm-2" type="search"  placeholder="Busqueda" aria-label="Search"> 
+       <nav className="navbar navbar-light bg-light">
+        <form className="form-inline">
+          <input className="form-control mr-sm-2" type="search"  placeholder="Busqueda" aria-label="Search"> 
           </input>
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Busqueda</button>
+          <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Busqueda</button>
           <img src={logo} alt="logo" width="25px"/>
        </form>
          </nav>
 
-
-    
-
-     
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-            </header>
-    </div>
-   
-   
+        {
+          loading ? 
+              <pacman style={{heigth :50, width:50 }} />
+              :
+            (
+              <div> {
+            productos.map(producto => (
+            <Card key={producto._id} producto={producto}/>
+            ))}
+        </div>
+            )
+        }
     </>
  
   );
